@@ -1,0 +1,136 @@
+<script id="itemsTemplate" type="text/x-jquery-tmpl">
+    <tr id="{{= id}}">
+        <td>{{= id}}</td>
+        <td>{{= title}}</td>
+        <td>{{= description}}</td>
+        <td>{{= seller}}</td>
+        <td>{{= startPrice}}</td>
+        <td>
+            {{if bidInc != 0}}
+                {{= bidInc}}
+            {{/if}}
+        </td>
+        <td>
+            {{if bestOffer != 0}}
+                <div class="col-md-1">
+                    <a data-toggle="modal" onClick="showBids({{= id}})" data-target="#bidsModal"><span class="glyphicon glyphicon-list-alt"></span></a>
+                </div>
+                <div class="col-md-1">
+                    {{= bestOffer}}
+                </div>
+            {{/if}}
+        </td>
+        <td>{{= bidder}}</td>
+        <td>{{= stopDate}}</td>
+        {{if "${user}" != ""}}
+            {{if sold == true}}
+                <td>Sold</td>
+            {{else login == "${user}"}}
+                <td>
+                    <div>
+                        <a href="edit-item?id={{= id}}" class="btn btn-default edit"><span class="glyphicon">&#xe065;</span></a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="#" class="btn btn-default delete" onClick="deleteItem({{= id}})"><span class="glyphicon">&#xe014;</span></a>
+                    </div>
+                </td>
+            {{else buyItNow == true}}
+                <td><a href="#" class="btn btn-default buy" onClick="buyItem({{= id}})"><span class="glyphicon">&#xe116;</span></a></td>
+            {{else}}
+                <td>
+                    <!--<form id="bid-form" method="post">
+                        <div class="row">
+                            <div class="form-group col-xs-4">
+                                <input type="number" min="{{= startPrice}}" step="{{= bidInc}}"
+                                    placeholder="{{if bestOffer !=0}} {{= bestOffer}} {{else}} {{= startPrice}} {{/if}}"
+                                    name="bid" id="bid" class="bid form-control" required>
+                                <input type="hidden" name="item" id="item" value="{{= id}}">
+                                <input type="hidden" name="bidder" id="bidder" value="${user}">
+                            </div>
+                            <div class="form-group col-xs-4">
+                                <input type="submit" name="bid_submit" id="bid_submit" class="form-control btn btn-default" value="Bid">
+                            </div>
+                        </div>
+                    </form>-->
+                    <input type="number" min="{{= startPrice}}" step="{{= bidInc}}"
+                        placeholder="{{if bestOffer !=0}} {{= bestOffer}} {{else}} {{= startPrice}} {{/if}}"
+                        name="bid" id="bid" class="bid form-control" required>
+                    <div class="col-xs-4">
+                        <a href="#" class="btn btn-default bid" onClick="bid({{= id}})">Bid</a>
+                    </div>
+                </td>
+            {{/if}}
+        {{/if}}
+    </tr>
+</script>
+
+<script id="itemRowTemplate" type="text/x-jquery-tmpl">
+    <td>{{= id}}</td>
+    <td>{{= title}}</td>
+    <td>{{= description}}</td>
+    <td>{{= seller}}</td>
+    <td>{{= startPrice}}</td>
+    <td>
+    {{if bidInc != 0}}
+        {{= bidInc}}
+            {{/if}}
+    </td>
+    <td>
+    {{if bestOffer != 0}}
+        <div class="col-md-1">
+            <a data-toggle="modal" onClick="showBids({{= id}})" data-target="#bidsModal"><span class="glyphicon glyphicon-list-alt"></span></a>
+        </div>
+        <div class="col-md-1">
+            {{= bestOffer}}
+        </div>
+    {{/if}}
+    </td>
+    <td>{{= bidder}}</td>
+    <td>{{= stopDate}}</td>
+        {{if "${user}" != ""}}
+            {{if sold == true}}
+                <td>Sold</td>
+            {{else login == "${user}"}}
+                <td>
+                    <div>
+                        <a href="edit-item?id={{= id}}" class="btn btn-default edit"><span class="glyphicon">&#xe065;</span></a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="#" class="btn btn-default delete" onClick="deleteItemFromAll({{= id}})"><span class="glyphicon">&#xe014;</span></a>
+                    </div>
+                </td>
+            {{else buyItNow == true}}
+                <td><a href="#" class="btn btn-default buy" onClick="buyItem({{= id}})"><span class="glyphicon">&#xe116;</span></a></td>
+            {{else}}
+                <td>
+                    <!--<form id="bid-form" method="post">
+                        <div class="row">
+                            <div class="form-group col-xs-4">
+                                <input type="number" min="{{= startPrice}}" step="{{= bidInc}}"
+                                    placeholder="{{if bestOffer !=0}} {{= bestOffer+bidInc}} {{else}} {{= startPrice}} {{/if}}"
+                                    name="bid" id="bid" class="bid form-control" required>
+                                <input type="hidden" name="item" id="item" value="{{= id}}">
+                                <input type="hidden" name="bidder" id="bidder" value="${user}">
+                            </div>
+                            <div class="form-group col-xs-4">
+                                <input type="submit" name="bid_submit" id="bid_submit" class="form-control btn btn-default" value="Bid">
+                            </div>
+                        </div>
+                    </form>-->
+                    <input type="number" min="{{= startPrice}}" step="{{= bidInc}}"
+                        placeholder="{{if bestOffer !=0}} {{= bestOffer}} {{else}} {{= startPrice}} {{/if}}"
+                        name="bid" id="bid" class="bid form-control" required>
+                    <div class="col-xs-4">
+                        <a href="#" class="btn btn-default bid" onClick="bid({{= id}}, '${user}')">Bid</a>
+                    </div>
+                </td>
+            {{/if}}
+        {{/if}}
+</script>
+
+<script id="bidsTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td>{{= bidder}}</td>
+        <td>{{= bid}}</td>
+    </tr>
+</script>
