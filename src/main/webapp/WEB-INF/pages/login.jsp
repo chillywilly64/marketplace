@@ -37,7 +37,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <form id="login-form" action="/login" method="post" role="form" style="display: block;">
-                                        <div class="alert alert-danger alert-dismissable fade in" ${(empty auth) ? 'style="display:none;"' : ''}>
+                                        <div class="alert alert-danger alert-dismissable fade in" ${(empty error) ? 'style="display:none;"' : ''}>
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                             <strong>Error!</strong> ${error}
                                         </div>

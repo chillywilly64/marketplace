@@ -62,21 +62,21 @@
                                         
                                         <spring:bind path="startPrice">
                                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                                <form:input type="number" min="0" path="startPrice" class="form-control" placeholder="Start price" disabled="${(not empty itemForm.bestOffer && itemForm.bestOffer != 0) ? 'true' : 'false'}" required="true"/>
+                                                <form:input type="number" min="0" path="startPrice" class="form-control" placeholder="Start price" readonly="${(not empty itemForm.bestOffer && itemForm.bestOffer != 0) ? 'true' : 'false'}" required="true"/>
                                                 <form:errors path="startPrice"/>
                                             </div>
                                         </spring:bind>
                                         
                                         <spring:bind path="timeLeft">
                                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                                <form:input type="number" min="0" path="timeLeft" id="time_left" class="form-control" placeholder="Time left" disabled="${(not empty itemForm.bestOffer && itemForm.bestOffer != 0) ? 'true' : 'false'}" required="true"></form:input>
+                                                <form:input type="number" min="0" path="timeLeft" id="time_left" class="form-control" placeholder="Time left" readonly="${(not empty itemForm.bestOffer && itemForm.bestOffer != 0) ? 'true' : 'false'}" required="true"></form:input>
                                                 <form:errors path="timeLeft"/>
                                             </div>
                                         </spring:bind>
 
                                         <spring:bind path="bidInc">
                                             <div class="form-group ${status.error ? 'has-error' : ''}">
-                                                <form:input type="number" path="bidInc" id="bid_inc" class="form-control" placeholder="Bid increment" disabled="${(not empty itemForm.bestOffer && itemForm.bestOffer != 0) ? 'true' : 'false'}" required="true"></form:input>
+                                                <form:input type="number" path="bidInc" id="bid_inc" class="form-control" placeholder="Bid increment" readonly="${(not empty itemForm.bestOffer && itemForm.bestOffer != 0) ? 'true' : 'false'}" required="true"></form:input>
                                                 <form:errors path="bidInc"/>
                                             </div>
                                         </spring:bind>
