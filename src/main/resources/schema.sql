@@ -1,5 +1,10 @@
+DROP TABLE Users IF EXISTS;
+DROP TABLE Items IF EXISTS;
+DROP TABLE Bids IF EXISTS ;
+
+
 CREATE TABLE Users(
-  User_ID INTEGER NOT NULL,
+  User_ID BIGINT AUTO_INCREMENT NOT NULL,
   Full_Name VARCHAR2(20) NOT NULL,
   Billing_Address VARCHAR2(30) NOT NULL,
   Login VARCHAR2(20) NOT NULL,
@@ -15,23 +20,8 @@ CREATE TABLE Users(
   ALTER TABLE Users
     ADD (CONSTRAINT PK_Users PRIMARY KEY (User_ID));
 
-CREATE SEQUENCE UsersSeq 
-    START WITH 1;
-
-CREATE OR REPLACE TRIGGER UsersIncrement 
-    BEFORE INSERT ON Users
-    FOR EACH ROW
-        BEGIN
-            IF :new.User_ID IS NULL THEN
-                SELECT UsersSeq.NEXTVAL
-                INTO   :new.User_ID
-                FROM   dual;
-            END IF;
-        END;
-/
-
 CREATE TABLE Items(
-  Item_ID INTEGER NOT NULL,
+  Item_ID BIGINT AUTO_INCREMENT NOT NULL,
   Seller_ID  INTEGER NOT NULL,
   Title VARCHAR(30) NOT NULL,
   Description VARCHAR(50) NULL,
@@ -57,24 +47,9 @@ CREATE TABLE Items(
     
   CREATE INDEX Items_Seller_ID
     ON Items(Seller_ID);
-
-CREATE SEQUENCE ItemsSeq 
-    START WITH 1;
-
-CREATE OR REPLACE TRIGGER ItemsIncrement 
-    BEFORE INSERT ON Items
-    FOR EACH ROW
-        BEGIN
-            IF :new.Item_ID IS NULL THEN
-                SELECT ItemsSeq.NEXTVAL
-                INTO   :new.Item_ID
-                FROM   dual;
-            END IF;
-        END;
-/
     
 CREATE TABLE Bids(
-  Bid_ID INTEGER NOT NULL,
+  Bid_ID BIGINT AUTO_INCREMENT NOT NULL,
   Bidder_ID INTEGER NOT NULL,
   Item_ID INTEGER NOT NULL,
   Bid NUMBER NOT NULL
@@ -103,19 +78,4 @@ CREATE TABLE Bids(
     
   CREATE INDEX Bids__Item_ID
     ON Bids(Item_ID);
-
-CREATE SEQUENCE BidsSeq 
-    START WITH 1;
-
-CREATE OR REPLACE TRIGGER BidsIncrement 
-    BEFORE INSERT ON Bids
-    FOR EACH ROW
-        BEGIN
-            IF :new.Bid_ID IS NULL THEN
-                SELECT BidsSeq.NEXTVAL
-                INTO   :new.Bid_ID
-                FROM   dual;
-            END IF;
-        END;
-/
 

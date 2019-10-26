@@ -1,5 +1,7 @@
 package com.epam.mentoring.springboot.hash;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 public class HashPassword {
     private static int workload = 12;
 
@@ -11,7 +13,7 @@ public class HashPassword {
     public static boolean checkPassword(String password, String storedHash) {
 
         if(null == storedHash || !storedHash.startsWith("$2a$"))
-            throw new java.lang.IllegalArgumentException("Invalid hash provided for comparison");
+            throw new IllegalArgumentException("Invalid hash provided for comparison");
 
         return BCrypt.checkpw(password, storedHash);
     }

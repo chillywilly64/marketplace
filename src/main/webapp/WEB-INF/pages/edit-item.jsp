@@ -11,19 +11,19 @@
         <title>Edit item</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" href="${contextPath}/resources/favicon.ico" />
+        <link rel="shortcut icon" href="${contextPath}/favicon.ico" />
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
         
-        <link href="${contextPath}/resources/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
-        <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="${contextPath}/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
+        <link href="${contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         
-        <script src="${contextPath}/resources/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="${contextPath}/js/bootstrap.min.js" type="text/javascript"></script>
         
-        <script src="${contextPath}/resources/js/edit-item.js"></script>
-        <link href="${contextPath}/resources/css/style.css" rel="stylesheet">
+        <script src="${contextPath}/js/edit-item.js"></script>
+        <link href="${contextPath}/css/style.css" rel="stylesheet">
     </head>
     <body>
         <jsp:include page="navbar.jsp"></jsp:include>

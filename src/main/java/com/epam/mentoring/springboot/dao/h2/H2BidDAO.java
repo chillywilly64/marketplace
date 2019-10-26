@@ -1,13 +1,19 @@
-package com.epam.mentoring.springboot.dao.oracle;
+package com.epam.mentoring.springboot.dao.h2;
 
 import com.epam.mentoring.springboot.dao.BidDAO;
 import com.epam.mentoring.springboot.entity.Bid;
 import java.util.List;
 import com.epam.mentoring.springboot.mapper.BidMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-public class OracleBidDAO extends JdbcDaoSupport implements BidDAO {
+@Repository
+public class H2BidDAO implements BidDAO {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private final String SELECT_SQL = "SELECT Bid_ID, Bid, " +
             "Bidders.User_ID, Bidders.Full_Name, Bidders.Billing_address, Bidders.Login, " +
@@ -21,14 +27,14 @@ public class OracleBidDAO extends JdbcDaoSupport implements BidDAO {
     
     @Override
     public List<Bid> getAll() {
-        return getJdbcTemplate().query(SELECT_SQL, new BidMapper());
+        return jdbcTemplate.query(SELECT_SQL, new BidMapper());
     }
 
     @Override
     public Bid getByID(long id) {
         String sql = SELECT_SQL +
                         "WHERE Bid_ID = ?";
-        return (Bid) getJdbcTemplate().queryForObject(sql, new Object[]{id}, new BidMapper());
+        return (Bid) jdbcTemplate.queryForObject(sql, new Object[]{id}, new BidMapper());
     }
 
     @Override
@@ -37,7 +43,7 @@ public class OracleBidDAO extends JdbcDaoSupport implements BidDAO {
                         "WHERE Bids.Item_ID = ? " +
                         "ORDER BY Bid DESC";
         try {
-            return getJdbcTemplate().query(sql, new Object[]{id}, new BidMapper());
+            return jdbcTemplate.query(sql, new Object[]{id}, new BidMapper());
         } catch (EmptyResultDataAccessException e){
             return null;
         }
@@ -50,7 +56,7 @@ public class OracleBidDAO extends JdbcDaoSupport implements BidDAO {
                         "ORDER BY Bid DESC) " +
                         "WHERE ROWNUM = 1";
         try {
-            return (Bid) getJdbcTemplate().queryForObject(sql, new Object[]{id}, new BidMapper());
+            return (Bid) jdbcTemplate.queryForObject(sql, new Object[]{id}, new BidMapper());
         } catch (EmptyResultDataAccessException e){
             return null;
         }
@@ -60,7 +66,7 @@ public class OracleBidDAO extends JdbcDaoSupport implements BidDAO {
     public void insert(Bid bid) {
         String sql = "INSERT INTO Bids(Bidder_ID, Item_ID, Bid) "
                                         + "VALUES (?, ?, ?)";
-        getJdbcTemplate().update(sql, bid.getBidder().getUserID(), bid.getItem().getItemID(), bid.getBid());
+        jdbcTemplate.update(sql, bid.getBidder().getUserID(), bid.getItem().getItemID(), bid.getBid());
     }
 
     @Override
@@ -68,14 +74,14 @@ public class OracleBidDAO extends JdbcDaoSupport implements BidDAO {
         String sql = "UPDATE Bids "
                     + "SET Bidder_ID = ?, Item_ID = ?, Bid = ? "
                     + "WHERE Bid_ID = ?";
-        getJdbcTemplate().update(sql, bid.getBidder().getUserID(), bid.getItem().getItemID(), bid.getBid());
+        jdbcTemplate.update(sql, bid.getBidder().getUserID(), bid.getItem().getItemID(), bid.getBid());
     }
 
     @Override
     public void delete(long id) {
         String sql = "DELETE FROM Bids "
                     + "WHERE Bid_ID = ?";
-        getJdbcTemplate().update(sql, id);
+        jdbcTemplate.update(sql, id);
     }
     
 }
