@@ -7,18 +7,18 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="controller, service, dao, validator"/>
+    <context:component-scan base-package="com.epam.mentoring.springboot.controller, com.epam.mentoring.springboot.service, com.epam.mentoring.springboot.dao, com.epam.mentoring.springboot.validator"/>
     
     
-    <bean id="UserDAO" class="dao.oracle.OracleUserDAO">
+    <bean id="UserDAO" class="com.epam.mentoring.springboot.dao.oracle.OracleUserDAO">
         <property name="dataSource" ref="dataSource" />
     </bean>
     
-    <bean id="ItemDAO" class="dao.oracle.OracleItemDAO">
+    <bean id="ItemDAO" class="com.epam.mentoring.springboot.dao.oracle.OracleItemDAO">
         <property name="dataSource" ref="dataSource" />
     </bean>
     
-    <bean id="BidDAO" class="dao.oracle.OracleBidDAO">
+    <bean id="BidDAO" class="com.epam.mentoring.springboot.dao.oracle.OracleBidDAO">
         <property name="dataSource" ref="dataSource" />
     </bean>
 

@@ -8,7 +8,7 @@
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
        
     
-    <context:component-scan base-package="controller"/>
+    <context:component-scan base-package="com.epam.mentoring.springboot.controller"/>
     
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
@@ -24,7 +24,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/add-item"/>
-            <bean class="interceptor.AuthInterceptor"/>
+            <bean class="com.epam.mentoring.springboot.interceptor.AuthInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
     
