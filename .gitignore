@@ -1,0 +1,8 @@
+/.gradle/
+/.idea/
+/gradle/
+/build/
+/target/
+/gradlew
+/gradlew.bat
+/Marketplace.iml
