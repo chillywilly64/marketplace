@@ -1,8 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'war'
-    id 'org.springframework.boot' version '1.5.22.RELEASE'
+    id 'org.springframework.boot' version '2.2.0.RELEASE'
 }
 
 repositories {
@@ -11,21 +10,12 @@ repositories {
 
 dependencies {
     compile 'jstl:jstl:1.2'
-    compile 'javax.servlet:javax.servlet-api:3.1.0'
-    compile 'org.springframework:spring-core:4.3.25.RELEASE'
-    compile 'org.springframework:spring-context:4.3.25.RELEASE'
-    compile 'org.springframework:spring-beans:4.3.25.RELEASE'
-    compile 'org.springframework:spring-web:4.3.25.RELEASE'
-    compile 'org.springframework:spring-webmvc:4.3.25.RELEASE'
-    compile 'org.springframework:spring-jdbc:4.3.25.RELEASE'
-    compile 'org.springframework:spring-aop:4.3.25.RELEASE'
-    compile 'org.springframework.security:spring-security-core:4.2.13.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter:1.5.22.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-jdbc:1.5.22.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-web:1.5.22.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-tomcat:1.5.22.RELEASE'
+    compile 'org.springframework.security:spring-security-core:5.2.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter:2.2.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-jdbc:2.2.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:2.2.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-tomcat:2.2.0.RELEASE'
     compile 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.27'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
     runtime 'com.h2database:h2:1.4.199'
 }
 
