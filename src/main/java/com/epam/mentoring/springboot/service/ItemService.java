@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +31,12 @@ public class ItemService {
     private final static long HOURS_TO_MILLIS = 3600000;
     
     public ItemDTO getItem(long id){
-        Item item = iDao.getByID(id);
+        Item item = iDao.findById(id).get();
         return itemToDTO(item);
     }
     
     public List<ItemDTO> getItems(){
-        List<Item> items = iDao.getAll();
+        Iterable<Item> items = iDao.findAll();
         List<ItemDTO> dtos = new ArrayList<>();
         for(Item item: items){
             dtos.add(itemToDTO(item));
@@ -43,7 +45,7 @@ public class ItemService {
     }
     
     public List<ItemDTO> getUsersItems(String user){
-        List<Item> items = iDao.getBySellerLogin(user);
+        List<Item> items = iDao.findBySellerLogin(user);
         List<ItemDTO> dtos = new ArrayList<>();
         for(Item item: items){
             dtos.add(itemToDTO(item));
@@ -53,7 +55,7 @@ public class ItemService {
     
     public void addItem(ItemDTO dto){
         Item item = new Item();
-        item.setSeller(uDao.getByLogin(dto.getLogin()));
+        item.setSeller(uDao.findByLogin(dto.getLogin()));
         item.setTitle(dto.getTitle());
         item.setDescription(dto.getDescription());
         item.setStartPrice(dto.getStartPrice());
@@ -64,14 +66,14 @@ public class ItemService {
             item.setBidIncrement(dto.getBidInc());
         }
         item.setBuyItNow(dto.isBuyItNow());
-        iDao.insert(item);
+        iDao.save(item);
     }
     
     public void editItem(ItemDTO dto){
-        Item item = iDao.getByID(dto.getId());
+        Item item = iDao.findById(dto.getId()).get();
         item.setTitle(dto.getTitle());
         item.setDescription(dto.getDescription());
-        if (bDao.getBestBidByItemID(item.getItemID()) == null) {
+        if (bDao.findFirstBidByItemOrderByBidDesc(item) == null) {
             item.setStartPrice(dto.getStartPrice());
             if (!dto.isBuyItNow()) {
                 item.setTimeLeft(dto.getTimeLeft());
@@ -79,21 +81,24 @@ public class ItemService {
             }
             item.setBuyItNow(dto.isBuyItNow()); 
         }
-        iDao.update(item);
+        iDao.save(item);
     }
     
     public void deleteItem(long id){
-        iDao.delete(id);
+        iDao.deleteById(id);
     }
     
     public ItemDTO sellItem(long id){
-        iDao.sell(id);
-        return itemToDTO(iDao.getByID(id));
+        Optional<Item> itemOpt = iDao.findById(id);
+        Item item = itemOpt.get();
+        item.setSold(true);
+        item = iDao.save(item);
+        return itemToDTO(item);
     }
     
     public ItemDTO bidItem(double bidValue, long itemID, String bidder) throws IllegalArgumentException{
-        Item item = iDao.getByID(itemID);
-        Bid bid = bDao.getBestBidByItemID(itemID);
+        Item item = iDao.findById(itemID).get();
+        Bid bid = bDao.findFirstBidByItemOrderByBidDesc(item);
         if((bidValue - item.getStartPrice())% item.getBidIncrement() != 0){
             throw new IllegalArgumentException("Bid must be multiple of bid increment");
         } else if (bid != null && bid.getBid() >= bidValue){
@@ -101,15 +106,16 @@ public class ItemService {
         } else {
             bid = new Bid();
             bid.setBid(bidValue);
-            bid.setBidder(uDao.getByLogin(bidder));
-            bid.setItem(iDao.getByID(itemID));
-            bDao.insert(bid);
-            return itemToDTO(iDao.getByID(itemID));
+            bid.setBidder(uDao.findByLogin(bidder));
+            bid.setItem(iDao.findById(itemID).get());
+            bDao.save(bid);
+            return itemToDTO(iDao.findById(itemID).get());
         }
     }
     
     public List<BidDTO> getBidsByItem(long id){
-        List<Bid> bids = bDao.getByItemID(id);
+        Item item = iDao.findById(id).get();
+        List<Bid> bids = bDao.findByItem(item);
         List<BidDTO> dtos = new ArrayList<>();
         for(Bid bid: bids){
             dtos.add(bidToDTO(bid));
@@ -127,10 +133,9 @@ public class ItemService {
     }
     
     private ItemDTO itemToDTO(Item item){
-
-        Bid bid = bDao.getBestBidByItemID(item.getItemID());
+        Bid bid = bDao.findFirstBidByItemOrderByBidDesc(item);
         ItemDTO dto = new ItemDTO();
-        dto.setId(item.getItemID());
+        dto.setId(item.getId());
         dto.setTitle(item.getTitle());
         dto.setDescription(item.getDescription());
         dto.setSeller(item.getSeller().getName());
@@ -145,7 +150,8 @@ public class ItemService {
         temp += item.getTimeLeft()*HOURS_TO_MILLIS;
 
         if(!item.isBuyItNow() && temp <= System.currentTimeMillis()){
-            iDao.sell(item.getItemID());
+            item.setSold(true);
+            iDao.save(item);
         }
         dto.setSold(item.isSold());
         dto.setTimeLeft(item.getTimeLeft());

@@ -14,7 +14,7 @@ public class UserService {
     private UserDAO uDao;
     
     public User getByLogin(String login){
-        return uDao.getByLogin(login);
+        return uDao.findByLogin(login);
     }
     
     public void reqistration(UserDTO userForm){
@@ -23,11 +23,11 @@ public class UserService {
         user.setBillingaddress(userForm.getaddress());
         user.setLogin(userForm.getLogin());
         user.setPassword(HashPassword.hashPassword(userForm.getPassword()));
-        uDao.insert(user);
+        uDao.save(user);
     }
 
     public boolean isAuthenticate(String login, String password){
-        User user = uDao.getByLogin(login);
+        User user = uDao.findByLogin(login);
         if (user == null){
             return false;
         } else { 
