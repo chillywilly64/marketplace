@@ -22,13 +22,13 @@ public class DatabaseHealthIndicator extends AbstractHealthIndicator {
 
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
-        long userCount = userDAO.count();
-        long itemCount = itemDAO.count();
-        long bidCount = bidDAO.count();
-
-        builder.up()
-            .withDetail("Users", userCount)
-            .withDetail("Items", itemCount)
-            .withDetail("Bids", bidCount);
+//        long userCount = userDAO.count();
+//        long itemCount = itemDAO.count();
+//        long bidCount = bidDAO.count();
+//
+//        builder.up()
+//            .withDetail("Users", userCount)
+//            .withDetail("Items", itemCount)
+//            .withDetail("Bids", bidCount);
     }
 }

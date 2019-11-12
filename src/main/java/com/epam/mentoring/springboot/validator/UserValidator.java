@@ -26,7 +26,7 @@ public class UserValidator implements Validator{
         if (user.getLogin().length() < 6 || user.getLogin().length() > 32) {
             errors.rejectValue("login", "Size.userForm.login");
         }
-        if (userService.getByLogin(user.getLogin()) != null) {
+        if (userService.getByLogin(user.getLogin()).isPresent()) {
             errors.rejectValue("login", "Duplicate.userForm.login");
         }
 

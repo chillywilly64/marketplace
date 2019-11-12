@@ -2,11 +2,14 @@ package com.epam.mentoring.springboot.dao;
 
 import com.epam.mentoring.springboot.entity.Bid;
 import com.epam.mentoring.springboot.entity.Item;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface BidDAO extends CrudRepository<Bid,Long> {
+public interface BidDAO {
+    Optional<Bid> find(long id);
     List<Bid> findByItem(Item itemId);
-    Bid findFirstBidByItemOrderByBidDesc(Item item);
+    void save(Bid bid);
+    Optional<Bid> findFirstBidByItemOrderByBidDesc(Item item);
+    void delete(Bid bid);
 }

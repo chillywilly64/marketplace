@@ -55,7 +55,7 @@ public class ItemService {
     
     public void addItem(ItemDTO dto){
         Item item = new Item();
-        item.setSeller(uDao.findByLogin(dto.getLogin()));
+        item.setSeller(uDao.findByLogin(dto.getLogin()).get());
         item.setTitle(dto.getTitle());
         item.setDescription(dto.getDescription());
         item.setStartPrice(dto.getStartPrice());
@@ -73,7 +73,7 @@ public class ItemService {
         Item item = iDao.findById(dto.getId()).get();
         item.setTitle(dto.getTitle());
         item.setDescription(dto.getDescription());
-        if (bDao.findFirstBidByItemOrderByBidDesc(item) == null) {
+        if (!bDao.findFirstBidByItemOrderByBidDesc(item).isPresent()) {
             item.setStartPrice(dto.getStartPrice());
             if (!dto.isBuyItNow()) {
                 item.setTimeLeft(dto.getTimeLeft());
@@ -81,7 +81,7 @@ public class ItemService {
             }
             item.setBuyItNow(dto.isBuyItNow()); 
         }
-        iDao.save(item);
+        //iDao.save(item);
     }
     
     public void deleteItem(long id){
@@ -92,21 +92,21 @@ public class ItemService {
         Optional<Item> itemOpt = iDao.findById(id);
         Item item = itemOpt.get();
         item.setSold(true);
-        item = iDao.save(item);
+        //item = iDao.save(item);
         return itemToDTO(item);
     }
     
     public ItemDTO bidItem(double bidValue, long itemID, String bidder) throws IllegalArgumentException{
         Item item = iDao.findById(itemID).get();
-        Bid bid = bDao.findFirstBidByItemOrderByBidDesc(item);
+        Optional<Bid> bidOpt = bDao.findFirstBidByItemOrderByBidDesc(item);
         if((bidValue - item.getStartPrice())% item.getBidIncrement() != 0){
             throw new IllegalArgumentException("Bid must be multiple of bid increment");
-        } else if (bid != null && bid.getBid() >= bidValue){
+        } else if (bidOpt.isPresent() && bidOpt.get().getBid() >= bidValue){
             throw new IllegalArgumentException("Bid must be bigger than best offer now");
         } else {
-            bid = new Bid();
+            Bid bid = new Bid();
             bid.setBid(bidValue);
-            bid.setBidder(uDao.findByLogin(bidder));
+            bid.setBidder(uDao.findByLogin(bidder).get());
             bid.setItem(iDao.findById(itemID).get());
             bDao.save(bid);
             return itemToDTO(iDao.findById(itemID).get());
@@ -133,7 +133,7 @@ public class ItemService {
     }
     
     private ItemDTO itemToDTO(Item item){
-        Bid bid = bDao.findFirstBidByItemOrderByBidDesc(item);
+        Optional<Bid> bid = bDao.findFirstBidByItemOrderByBidDesc(item);
         ItemDTO dto = new ItemDTO();
         dto.setId(item.getId());
         dto.setTitle(item.getTitle());
@@ -142,16 +142,16 @@ public class ItemService {
         dto.setLogin(item.getSeller().getLogin());
         dto.setStartPrice(item.getStartPrice());
         dto.setBidInc(item.getBidIncrement());
-        if(bid != null){
-            dto.setBestOffer(bid.getBid());
-            dto.setBidder(bid.getBidder().getName());
+        if(bid.isPresent()){
+            dto.setBestOffer(bid.get().getBid());
+            dto.setBidder(bid.get().getBidder().getName());
         }
         long temp = item.getStartBiddingDate().getTime();
         temp += item.getTimeLeft()*HOURS_TO_MILLIS;
 
         if(!item.isBuyItNow() && temp <= System.currentTimeMillis()){
             item.setSold(true);
-            iDao.save(item);
+            //iDao.save(item);
         }
         dto.setSold(item.isSold());
         dto.setTimeLeft(item.getTimeLeft());

@@ -7,13 +7,15 @@ import com.epam.mentoring.springboot.hash.HashPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
     
     @Autowired
     private UserDAO uDao;
     
-    public User getByLogin(String login){
+    public Optional<User> getByLogin(String login){
         return uDao.findByLogin(login);
     }
     
@@ -27,12 +29,8 @@ public class UserService {
     }
 
     public boolean isAuthenticate(String login, String password){
-        User user = uDao.findByLogin(login);
-        if (user == null){
-            return false;
-        } else { 
-            return HashPassword.checkPassword(password, user.getPassword());
-        }
+        Optional<User> user = uDao.findByLogin(login);
+        return user.filter(value -> HashPassword.checkPassword(password, value.getPassword())).isPresent();
     }
     
 }
